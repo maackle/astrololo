@@ -1,0 +1,11 @@
+extends 'layout/base.jade'
+
+block main_content
+	.container
+		h1 user central
+
+		h2 add subjects
+		form(method="post", action=url_for("user.import_ical"), enctype="multipart/form-data")
+			input(type="file", name="ics") ICS file
+			input(type="submit")
+		

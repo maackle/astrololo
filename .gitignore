@@ -1,0 +1,10 @@
+node_modules/
+.sass-cache/
+.zzz/
+
+static/bower/
+log/
+test-data/
+
+.DS_Store
+*.pyc

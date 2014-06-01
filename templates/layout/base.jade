@@ -1,0 +1,43 @@
+doctype 5
+html
+	head
+		title 
+			block title
+				| ASTROLOLO
+		link(rel="shortcut icon", href=url_for('static', filename='images/favicon.ico'))
+		block css
+			link(rel="stylesheet", href="/static/bower/bootstrap/dist/css/bootstrap.css")
+			link(rel="stylesheet", href="/static/build/main.css")
+	body
+		block navbar
+			nav#navbar: .container
+				if current_user.is_authenticated()
+					p Hello #{current_user.email}
+						a(href=url_for('auth.logout')) log out
+				else
+					p
+						a(href=url_for('auth.login')) log in
+						a(href=url_for('auth.register')) register
+				p
+					a(href=url_for('home')) home
+					a(href=url_for('user.home')) users
+					if current_user.is_authenticated()
+						a(href=url_for('user.profile', user_slug=current_user.slug)) profile
+			hr
+
+		block messages
+			- var messages = (flashes or []) + get_flashed_messages(with_categories=true)
+			.container
+				.messages
+					for category, message in messages
+						div(class="alert alert-dismissable alert-#{category}")
+							button.close(type='button', data-dismiss='alert', aria-hidden='true') &times;
+							= message
+
+		block main_content
+
+		block js
+
+			script.
+				document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':17364/livereload.js?snipver=1"></' + 'script>')
+				

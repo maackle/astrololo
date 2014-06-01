@@ -1,0 +1,12 @@
+extends layout/base.jade
+
+- from 'mixins.jade' import formfield
+
+block main_content
+	.container
+		h1 login
+		form(method="post")
+			!= form.csrf_token
+			+formfield(form.email)
+			+formfield(form.password)
+			input(type="submit")

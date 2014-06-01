@@ -1,0 +1,28 @@
+@import url("http://fonts.googleapis.com/css?family=Ubuntu:300,400,700");
+@import url("http://fonts.googleapis.com/css?family=Changa+One");
+@import url("http://fonts.googleapis.com/css?family=Josefin+Sans:300,400,700");
+
+body {
+	background: #eee;
+	font-family: 'Ubuntu';
+}
+
+h1, h2, h3, h4 {
+	font-family: 'Changa One';
+	text-transform: uppercase;
+}
+
+#navbar {
+	a {
+		display: inline-block;
+		margin: 0 10px;
+	}
+}
+
+th {
+	font-weight: bold;
+	font-size: 1.1em;
+	border-bottom: 3px solid #333;
+	// background: #333;
+	// color: #eee;
+}

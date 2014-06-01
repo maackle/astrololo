@@ -1,0 +1,20 @@
+extends 'layout/base.jade'
+
+block main_content
+	.container
+		h1 explore
+		.row: .col-md-6
+			table.table
+				tbody
+					for subject, chart in subjects
+						tr: td(colspan=2): h3.subject-name= subject.name
+						tr
+							th Planet
+							th Sign
+						for body in ('Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto')
+							- var sign = chart[body].sign
+							tr
+								td #{ get_symbol(body) } #{ body }
+								td 
+									span.sign #{ get_symbol(sign.name) } #{ sign.name } 
+									span.angle #{ chart[body].angle_dms }
