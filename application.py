@@ -20,8 +20,8 @@ def create_app():
 
 	app.config.from_object('config.settings')
 	try:
-		app.config.from_envvar('CSE_SETTINGS')
-		print("Loaded config from envvar CSE_SETTINGS")
+		app.config.from_envvar('ASTROLOLO_SETTINGS')
+		print("Loaded config from envvar ASTROLOLO_SETTINGS")
 	except:
 		app.config.from_object('config.development')
 		print("Loaded DEVELOPMENT config")

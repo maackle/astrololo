@@ -3,8 +3,10 @@ mixin formfield(field, placeholder="")
 		= field.label(class="control-label")
 		if field.type == 'FileField'
 			img(src=field)
-		|  
-		!= field(class="form-control", placeholder=placeholder)
+		if field.name == 'password'
+			!= field(class="form-control", placeholder=placeholder, type="password")
+		else
+			!= field(class="form-control", placeholder=placeholder)
 		ul.errors
 			for error in field.errors
 				li= error
