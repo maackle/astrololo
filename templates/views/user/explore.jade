@@ -2,9 +2,11 @@ extends 'layout/base.jade'
 
 block main_content
 	.container
-		h1 explore
+		h1 Explore
+		p Explore your friends' natal charts. Examine common factors, group them into categories, filtering, etc.
+		
 		.row: .col-md-6
-			table.table
+			table.table.natal-table
 				tbody
 					for subject, chart in subjects
 						tr: td(colspan=2): h3.subject-name= subject.name
@@ -13,8 +15,12 @@ block main_content
 							th Sign
 						for body in ('Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto')
 							- var sign = chart[body].sign
-							tr
-								td #{ get_symbol(body) } #{ body }
+							tr.position
 								td 
-									span.sign #{ get_symbol(sign.name) } #{ sign.name } 
+									span.symbol #{ get_symbol(body) } 
+									| #{ body }
+								td 
+									span.sign 
+										span.symbol #{ get_symbol(sign.name) } 
+										| #{ sign.name } 
 									span.angle #{ chart[body].angle_dms }

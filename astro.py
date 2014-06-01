@@ -73,7 +73,7 @@ def radians_to_degmin(rad):
 	d = int(deg)
 	r = deg - d
 	m = int(r * 60)
-	return "{}º {}\"".format(d,m)
+	return "{}° {}\"".format(d,m)
 
 
 def get_zodiac_position(body):

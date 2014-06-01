@@ -2,9 +2,14 @@
 @import url("http://fonts.googleapis.com/css?family=Changa+One");
 @import url("http://fonts.googleapis.com/css?family=Josefin+Sans:300,400,700");
 
-body {
+@import "variables";
+
+@import "compass";
+
+html, body {
+	color: $text-color;
 	background: #eee;
-	font-family: 'Ubuntu';
+	font-family: 'dejavu', 'Ubuntu', 'Helvetica Neue';
 }
 
 h1, h2, h3, h4 {
@@ -12,10 +17,50 @@ h1, h2, h3, h4 {
 	text-transform: uppercase;
 }
 
+ul {
+	list-style: none;
+	padding: 0;
+}
+
+a:link, a:visited {
+	@include transition(color 300ms);
+	color: $link-color;
+}
+
 #navbar {
-	a {
-		display: inline-block;
-		margin: 0 10px;
+	height: $navbar-height;
+	line-height: $navbar-height;
+
+	.logo {
+		line-height: $navbar-height;
+		margin: 0;
+		margin-right: 30px;
+		padding: 0;
+		float: left;
+		color: $color-1;
+	}
+
+	.links {
+
+		li {
+			display: inline-block;
+			margin: 0 10px;
+		}
+
+		a {
+			color: $text-color;
+			text-decoration: none;
+			&:hover {
+				color: $link-color;
+			}
+		}
+	}
+
+	.links-left {
+		float: left;
+	}
+	.links-right {
+		float: right;
 	}
 }
 
@@ -25,4 +70,15 @@ th {
 	border-bottom: 3px solid #333;
 	// background: #333;
 	// color: #eee;
+}
+
+.natal-table {
+
+	.position:nth-child(odd) {
+		background: #e1e1e1;
+	}
+	.symbol {
+		font-size: 1.1em;
+		// font-weight: bold;
+	}
 }
