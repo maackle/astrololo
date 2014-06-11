@@ -106,7 +106,6 @@ def get_natal_chart(date):
 	for fn in bodies:
 		body = fn(date)
 		(sign, angle) = get_zodiac_position(body)
-		print(angle)
 		chart[body.name] = {
 			'sign': sign,
 			'angle': angle,

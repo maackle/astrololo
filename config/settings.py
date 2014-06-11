@@ -6,4 +6,4 @@ WTF_CSRF_ENABLED = True
 MEDIA_FOLDER = 'media'
 
 DEBUG = True
-TESTING = True
+TESTING = False

@@ -11,6 +11,11 @@ def load_user(userid):
 	user = User.objects(id=userid).first()
 	return user
 
+@login_manager.unauthorized_handler
+def unauthorized():
+	flash('Please log in first.', 'danger')
+	return redirect(url_for('auth.login') + '?next=' + request.path)
+
 blueprint = Blueprint('auth', __name__, template_folder='templates')
 
 @blueprint.route('/login/', methods=['GET', 'POST'])
@@ -24,7 +29,7 @@ def login():
 			user = User.authenticate(**data)
 			if user:
 				result = login_user(user, remember=False)
-				flash("Logged in successfully.")
+				flash("Logged in successfully.", 'success')
 				return redirect(request.args.get("next") or url_for("home"))
 			else:
 				flash("Nope!", 'danger')
