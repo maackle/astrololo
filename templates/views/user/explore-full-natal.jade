@@ -1,0 +1,32 @@
+extends 'layout/base.jade'
+
+block main_content
+	.container
+		h1 Explore
+		p Explore your friends' natal charts. Examine common factors, group them into categories, filtering, etc.
+		
+		.row: .col-md-6
+			table.table.natal-table
+				tbody
+					for subject, chart in subjects
+						tr: td(colspan=2)
+							h3.subject-name= subject.name
+							h4.subject-birthdate= subject.birthdate
+						tr
+							th Planet
+							th Sign
+						if subject.birth_year_known
+							- var bodies = ('Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto')
+						else
+							- var bodies = ('Sun',)
+						for body in bodies
+							- var sign = chart[body].sign
+							tr.position
+								td 
+									span.symbol #{ get_symbol(body) } 
+									| #{ body }
+								td 
+									span.sign 
+										span.symbol #{ get_symbol(sign.name) } 
+										| #{ sign.name } 
+									span.angle #{ chart[body].angle_dms }

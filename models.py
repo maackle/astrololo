@@ -13,8 +13,13 @@ class Subject(db.EmbeddedDocument):
 	name = db.StringField(max_length=128, required=True)
 	birthdate = db.DateTimeField()
 
+	birth_place_known = db.BooleanField(default=False)
+	birth_year_known = db.BooleanField(default=False)
+	birth_time_known = db.BooleanField(default=False)
+	birth_date_known = db.BooleanField(default=True)
+
 	def get_natal_chart(self):
-		return astro.get_natal_chart(self.birthdate)
+		return astro.get_natal_chart(self.birthdate, year_known=self.birth_year_known)
 
 
 class User(db.Document, UserMixin):

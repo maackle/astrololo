@@ -86,20 +86,23 @@ def get_zodiac_position(body):
 def get_symbol(name):
 	return all_symbols[name]
 
-def get_natal_chart(date):
+def get_natal_chart(date, year_known=True):
 
-	bodies = (
-		Sun,
-		Moon,
-		Mercury,
-		Venus,
-		Mars,
-		Jupiter,
-		Saturn,
-		Uranus,
-		Neptune,
-		Pluto,
-	)
+	if year_known:
+		bodies = (
+			Sun,
+			Moon,
+			Mercury,
+			Venus,
+			Mars,
+			Jupiter,
+			Saturn,
+			Uranus,
+			Neptune,
+			Pluto,
+		)
+	else:
+		bodies = (Sun,)
 
 	chart = {}
 
@@ -115,6 +118,33 @@ def get_natal_chart(date):
 	return chart
 
 
+def birthdays_from_fb_ical(data):
+	import re
+	import icalendar
+	from dateutil import parser
+	cal = icalendar.Calendar.from_ical(data)
+	folks = []
+	for component in cal.walk():
+		if component.name == "VEVENT":
+			date_str = component.get('dtstart').to_ical()
+			date = parser.parse(date_str)
+			summary = component.get('summary')
+			m = re.match(r"(.*).s Birthday", summary, flags=re.IGNORECASE)
+			print(date, summary)
+			if m:
+				name = m.group(1)
+				if date.year is 1904:
+					year = None
+				else:
+					year = date.year
+
+				folks.append({
+					'date': date,
+					'year': year,
+					'name': name,
+				})
+	return folks
+
 def birthdays_from_ical(data):
 	import re
 	import icalendar
@@ -125,13 +155,18 @@ def birthdays_from_ical(data):
 		if component.name == "VEVENT":
 			date_str = component.get('dtstart').to_ical()
 			date = parser.parse(date_str)
-			if date.year is not 1904:
-				summary = component.get('summary')
-				m = re.match(r"(.*).s Birthday", summary)
-				if m:
-					name = m.group(1)
-					folks.append({
-						'date': date,
-						'name': name,
-					})
+			summary = component.get('summary')
+			m = re.match(r"(.*).s Birthday", summary)
+			if m:
+				name = m.group(1)
+				if date.year is 1904:
+					year = None
+				else:
+					year = date.year
+
+				folks.append({
+					'date': date,
+					'year': year,
+					'name': name,
+				})
 	return folks

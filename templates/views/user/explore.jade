@@ -8,19 +8,10 @@ block main_content
 		.row: .col-md-6
 			table.table.natal-table
 				tbody
-					for subject, chart in subjects
-						tr: td(colspan=2): h3.subject-name= subject.name
-						tr
-							th Planet
-							th Sign
-						for body in ('Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto')
-							- var sign = chart[body].sign
-							tr.position
-								td 
-									span.symbol #{ get_symbol(body) } 
-									| #{ body }
-								td 
-									span.sign 
-										span.symbol #{ get_symbol(sign.name) } 
-										| #{ sign.name } 
-									span.angle #{ chart[body].angle_dms }
+					for sign_name in zodiac_names
+						tr.sign-marker: th(colspan=3)= sign_name
+						for subject, chart in groups[sign_name]
+							tr.sign(class=sign_name.lower())
+								td.subject-name= subject.name
+								td.subject-birthdate= subject.birthdate
+								td.angle #{ get_symbol(sign_name) } #{ chart['Sun'].angle_dms }

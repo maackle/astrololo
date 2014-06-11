@@ -81,4 +81,11 @@ th {
 		font-size: 1.1em;
 		// font-weight: bold;
 	}
+	.sign-marker {
+		background: black;
+		color: white;
+	}
+
+	.sign.aries { background: hsl(0, 50%, 100%); }
+	.sign.taurus { background: hsl(20, 50%, 100%); }
 }
