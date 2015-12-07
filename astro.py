@@ -84,95 +84,38 @@ def get_zodiac_position(body):
     angle = ecl.lon
     sector = int(angle / (2*math.pi / 12))
     angle -= sector * 2 * math.pi / 12
-    return (zodiac_signs[sector], degrees(angle))
+    return (zodiac_names[sector], degrees(angle), ecl.lon)
 
 
 def get_symbol(name):
     return all_symbols[name]
 
 
-def get_natal_chart(date, year_known=True):
+def get_natal_chart(date):
 
-    if year_known:
-        bodies = (
-            Sun,
-            Moon,
-            Mercury,
-            Venus,
-            Mars,
-            Jupiter,
-            Saturn,
-            Uranus,
-            Neptune,
-            Pluto,
-        )
-    else:
-        bodies = (Sun,)
+    bodies = (
+        Sun,
+        Moon,
+        Mercury,
+        Venus,
+        Mars,
+        Jupiter,
+        Saturn,
+        Uranus,
+        Neptune,
+        Pluto,
+    )
 
     chart = {}
 
     for fn in bodies:
         body = fn(date)
-        (sign, angle) = get_zodiac_position(body)
+        (sign, angle, total_angle) = get_zodiac_position(body)
         chart[body.name] = {
             'sign': sign,
+            'total_angle': total_angle,
             'angle': angle,
             'angle_dms': radians_to_degmin(angle),
         }
 
     return chart
-
-
-def birthdays_from_fb_ical(data):
-    import re
-    import icalendar
-    from dateutil import parser
-    cal = icalendar.Calendar.from_ical(data)
-    folks = []
-    for component in cal.walk():
-        if component.name == "VEVENT":
-            date_str = component.get('dtstart').to_ical()
-            date = parser.parse(date_str)
-            summary = component.get('summary')
-            m = re.match(r"(.*).s Birthday", summary, flags=re.IGNORECASE)
-
-            if m:
-                name = m.group(1)
-                if date.year is 1904:
-                    year = None
-                else:
-                    year = date.year
-
-                folks.append({
-                    'date': date,
-                    'year': year,
-                    'name': name,
-                })
-    return folks
-
-
-def birthdays_from_ical(data):
-    import re
-    import icalendar
-    from dateutil import parser
-    cal = icalendar.Calendar.from_ical(data)
-    folks = []
-    for component in cal.walk():
-        if component.name == "VEVENT":
-            date_str = component.get('dtstart').to_ical()
-            date = parser.parse(date_str)
-            summary = component.get('summary')
-            m = re.match(r"(.*).s Birthday", summary)
-            if m:
-                name = m.group(1)
-                if date.year is 1904:
-                    year = None
-                else:
-                    year = date.year
-
-                folks.append({
-                    'date': date,
-                    'year': year,
-                    'name': name,
-                })
-    return folks

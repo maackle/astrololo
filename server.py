@@ -1,10 +1,9 @@
-from application import setup
+from application import app
 
-app = setup()
 
 if __name__ == '__main__':
-	# handler = RotatingFileHandler("log/error.log", maxBytes=10000000, backupCount=10)
-	# handler.setLevel(logging.WARNING)
-	# app.logger.addHandler(handler)
+    # handler = RotatingFileHandler("log/error.log", maxBytes=10000000, backupCount=10)
+    # handler.setLevel(logging.WARNING)
+    # app.logger.addHandler(handler)
 
-	app.run(debug=True, port=45535)
+    app.run(debug=True, port=45535)

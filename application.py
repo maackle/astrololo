@@ -1,13 +1,10 @@
 import logging
-from logging.handlers import RotatingFileHandler
 
-from flask import Flask, render_template, request, redirect, session, flash, url_for, g
-from flask.ext.assets import Environment, Bundle
-from flask.ext.login import current_user
-from flask.ext.admin import Admin
+from flask import Flask, render_template, request, redirect, session, flash, url_for, g, jsonify
 import requests
-import mongoengine
-from flask.ext.mongoengine import MongoEngine
+
+from astro import get_natal_chart
+from dateutil import parser
 
 
 def create_app():
@@ -26,11 +23,6 @@ def create_app():
         app.config.from_object('config.development')
         print("Loaded DEVELOPMENT config")
 
-    app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
-
-    assets = Environment(app)
-    assets.url = app.static_url_path
-
     cache.init_app(app, config={
         'CACHE_TYPE': 'simple',
         # 'CACHE_DIR': '.flask-cache',
@@ -40,62 +32,37 @@ def create_app():
 
     return app
 
-def create_db(app):
-
-    db = MongoEngine(app)
-    return db
-
-def setup_routes(app):
-    '''
-    Do everything that needs to be done, return everything that needs to be returned
-    '''
-
-    from routes.auth import blueprint as auth
-    from routes.frontend import blueprint as frontend
-    from routes.user import blueprint as user
-    from routes.auth import login_manager
-    login_manager.init_app(app)
-
-    app.register_blueprint(frontend, url_prefix='')
-    app.register_blueprint(auth, url_prefix='/auth')
-    app.register_blueprint(user, url_prefix='/user')
-
-    @app.route('/')
-    def home():
-        return redirect(url_for('frontend.home'))
-
-    @app.route('/login/')
-    def login():
-        return redirect(url_for('auth.login'))
-
-    @app.route('/logout/')
-    def logout():
-        return redirect(url_for('auth.logout'))
-
-    @app.route('/images/<image_id>/')
-    def image(image_id):
-        print(dir(db))
-        images = db.images.files
-        print(dir(images))
-
-
-def setup_admin(app):
-    from admin import UserAdminView
-    admin = Admin(app)
-    admin.add_view(UserAdminView())
-
-def setup():
-    setup_routes(app)
-    setup_admin(app)
-    return app
 
 app = create_app()
-db = create_db(app)
 
-# if __name__ == '__main__':
-#   # handler = RotatingFileHandler("log/error.log", maxBytes=10000000, backupCount=10)
-#   # handler.setLevel(logging.WARNING)
-#   # app.logger.addHandler(handler)
 
-#   setup(app)
-#   app.run(debug=True, port=5005)
+@app.route('/natal/')
+def natal():
+    """
+    Request:
+        date=1984-11-11
+
+    Response:
+    {
+        Sun: {
+            sign: "Scorpio",
+            angle: 0.3315804123368795,
+            angle_dms: "18° 59"",
+            total_angle: 3.9967718415249713
+        },
+        Moon: {
+            angle: 0.2554040978936747,
+            angle_dms: "14° 38"",
+            sign: "Gemini",
+            total_angle: 1.3026016490902723
+        },
+    }
+    """
+
+    date_str = request.args.get('date')
+    if date_str:
+        date = parser.parse(date_str)
+        chart = get_natal_chart(date)
+        return jsonify(chart)
+    else:
+        return jsonify({"error": "invalid date"})
