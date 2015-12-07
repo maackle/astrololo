@@ -1,6 +1,7 @@
 import logging
 
 from flask import Flask, render_template, request, redirect, session, flash, url_for, g, jsonify
+from flask_limiter import Limiter
 import requests
 
 from astro import get_natal_chart
@@ -16,6 +17,7 @@ def create_app():
     app = Flask(__name__)
 
     app.config.from_object('config.settings')
+
     try:
         app.config.from_envvar('ASTROLOLO_SETTINGS')
         print("Loaded config from envvar ASTROLOLO_SETTINGS")
@@ -34,9 +36,11 @@ def create_app():
 
 
 app = create_app()
+limiter = Limiter(app)
 
 
 @app.route('/natal/')
+@limiter.limit("100/minute")
 def natal():
     """
     Request:
