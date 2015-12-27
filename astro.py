@@ -111,8 +111,8 @@ def get_natal_chart(date):
     for fn in bodies:
         body = fn(date)
         (sign, angle, total_angle) = get_zodiac_position(body)
-        chart[body.name] = {
-            'sign': sign,
+        chart[body.name.lower()] = {
+            'sign': sign.lower(),
             'total_angle': total_angle,
             'angle': angle,
             'angle_dms': radians_to_degmin(angle),
